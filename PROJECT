@@ -1,0 +1,16 @@
+domain: projectsveltos.io
+layout:
+- go.kubebuilder.io/v3
+projectName: ytt-controller
+repo: github.com/gianlucam76/ytt-controller
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: projectsveltos.io
+  group: extension
+  kind: YttSource
+  path: github.com/gianlucam76/ytt-controller/api/v1alpha1
+  version: v1alpha1
+version: "3"

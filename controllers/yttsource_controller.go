@@ -230,7 +230,7 @@ func (r *YttSourceReconciler) WatchForFlux(mgr ctrl.Manager, c controller.Contro
 
 	err := c.Watch(&source.Kind{Type: &sourcev1.GitRepository{}},
 		handler.EnqueueRequestsFromMapFunc(r.requeueYttSourceForFluxSources),
-		FluxSourcePredicates(mgr.GetLogger().WithValues("predicate", "fluxsourcepredicate")),
+		FluxSourcePredicates(r.Scheme, mgr.GetLogger().WithValues("predicate", "fluxsourcepredicate")),
 	)
 	if err != nil {
 		return err
@@ -238,7 +238,7 @@ func (r *YttSourceReconciler) WatchForFlux(mgr ctrl.Manager, c controller.Contro
 
 	err = c.Watch(&source.Kind{Type: &sourcev1b2.OCIRepository{}},
 		handler.EnqueueRequestsFromMapFunc(r.requeueYttSourceForFluxSources),
-		FluxSourcePredicates(mgr.GetLogger().WithValues("predicate", "fluxsourcepredicate")),
+		FluxSourcePredicates(r.Scheme, mgr.GetLogger().WithValues("predicate", "fluxsourcepredicate")),
 	)
 	if err != nil {
 		return err
@@ -246,7 +246,7 @@ func (r *YttSourceReconciler) WatchForFlux(mgr ctrl.Manager, c controller.Contro
 
 	return c.Watch(&source.Kind{Type: &sourcev1b2.Bucket{}},
 		handler.EnqueueRequestsFromMapFunc(r.requeueYttSourceForFluxSources),
-		FluxSourcePredicates(mgr.GetLogger().WithValues("predicate", "fluxsourcepredicate")),
+		FluxSourcePredicates(r.Scheme, mgr.GetLogger().WithValues("predicate", "fluxsourcepredicate")),
 	)
 }
 

@@ -375,7 +375,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/ytt-controller-amd64:dev
+        image: projectsveltos/ytt-controller-amd64:v0.1.0
         livenessProbe:
           httpGet:
             path: /healthz

@@ -6,6 +6,18 @@ A YTT Carvel controller. It can fetch YTT files from:
 process those files programmatically invoking Carvel `ytt` and store the output in its Status section.
 [Sveltos addon-manager](https://github.com/projectsveltos/addon-manager) can then be used to deploy the output of the ytt-controller in all selected managed clusters.
 
+## Install
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/gianlucam76/ytt-controller/main/manifest/manifest.yaml
+```
+
+or if you want a specific version
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/gianlucam76/ytt-controller/<tag>/manifest/manifest.yaml
+```
+
 ## Using Flux GitRepository
 
 For instance, this Github repository https://github.com/gianlucam76/ytt-examples contains ytt files. 

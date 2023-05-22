@@ -200,7 +200,7 @@ var _ = Describe("YttSource Predicates: FluxSourcePredicates", func() {
 	})
 
 	It("Create reprocesses", func() {
-		sourcePredicate := controllers.FluxSourcePredicates(logger)
+		sourcePredicate := controllers.FluxSourcePredicates(scheme, logger)
 
 		e := event.CreateEvent{
 			Object: gitRepository,
@@ -210,7 +210,7 @@ var _ = Describe("YttSource Predicates: FluxSourcePredicates", func() {
 		Expect(result).To(BeTrue())
 	})
 	It("Delete does reprocess", func() {
-		sourcePredicate := controllers.FluxSourcePredicates(logger)
+		sourcePredicate := controllers.FluxSourcePredicates(scheme, logger)
 
 		e := event.DeleteEvent{
 			Object: gitRepository,
@@ -220,7 +220,7 @@ var _ = Describe("YttSource Predicates: FluxSourcePredicates", func() {
 		Expect(result).To(BeTrue())
 	})
 	It("Update reprocesses when artifact has changed", func() {
-		sourcePredicate := controllers.FluxSourcePredicates(logger)
+		sourcePredicate := controllers.FluxSourcePredicates(scheme, logger)
 
 		gitRepository.Status.Artifact = &sourcev1.Artifact{
 			Revision: randomString(),
@@ -244,7 +244,7 @@ var _ = Describe("YttSource Predicates: FluxSourcePredicates", func() {
 		Expect(result).To(BeTrue())
 	})
 	It("Update does not reprocess when artifact has not changed", func() {
-		sourcePredicate := controllers.FluxSourcePredicates(logger)
+		sourcePredicate := controllers.FluxSourcePredicates(scheme, logger)
 
 		gitRepository.Status.Artifact = &sourcev1.Artifact{
 			Revision: randomString(),

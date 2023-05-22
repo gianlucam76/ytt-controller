@@ -24,6 +24,7 @@ import (
 	sourcev1b2 "github.com/fluxcd/source-controller/api/v1beta2"
 	"github.com/go-logr/logr"
 	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/event"
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
 
@@ -42,20 +43,20 @@ func ConfigMapPredicates(logger logr.Logger) predicate.Funcs {
 			)
 
 			if oldConfigMap == nil {
-				log.V(logs.LogVerbose).Info("Old ConfigMap is nil. Reconcile ClusterSummaries.")
+				log.V(logs.LogVerbose).Info("Old ConfigMap is nil. Reconcile YttSources.")
 				return true
 			}
 
 			if !reflect.DeepEqual(oldConfigMap.BinaryData, newConfigMap.BinaryData) {
 				log.V(logs.LogVerbose).Info(
-					"ConfigMap Data changed. Will attempt to reconcile associated ClusterSummaries.",
+					"ConfigMap Data changed. Will attempt to reconcile associated YttSources.",
 				)
 				return true
 			}
 
 			// otherwise, return false
 			log.V(logs.LogVerbose).Info(
-				"ConfigMap did not match expected conditions.  Will not attempt to reconcile associated ClusterSummaries.")
+				"ConfigMap did not match expected conditions.  Will not attempt to reconcile associated YttSources.")
 			return false
 		},
 		CreateFunc: func(e event.CreateEvent) bool {
@@ -82,20 +83,20 @@ func SecretPredicates(logger logr.Logger) predicate.Funcs {
 			)
 
 			if oldSecret == nil {
-				log.V(logs.LogVerbose).Info("Old Secret is nil. Reconcile ClusterSummaries.")
+				log.V(logs.LogVerbose).Info("Old Secret is nil. Reconcile YttSources.")
 				return true
 			}
 
 			if !reflect.DeepEqual(oldSecret.Data, newSecret.Data) {
 				log.V(logs.LogVerbose).Info(
-					"Secret Data changed. Will attempt to reconcile associated ClusterSummaries.",
+					"Secret Data changed. Will attempt to reconcile associated YttSources.",
 				)
 				return true
 			}
 
 			// otherwise, return false
 			log.V(logs.LogVerbose).Info(
-				"Secret did not match expected conditions.  Will not attempt to reconcile associated ClusterSummaries.")
+				"Secret did not match expected conditions.  Will not attempt to reconcile associated YttSources.")
 			return false
 		},
 		CreateFunc: func(e event.CreateEvent) bool {
@@ -117,7 +118,7 @@ var (
 		)
 
 		log.V(logs.LogVerbose).Info(fmt.Sprintf(
-			"%s did match expected conditions.  Will attempt to reconcile associated ClusterSummaries.",
+			"%s did match expected conditions.  Will attempt to reconcile associated YttSources.",
 			e.Object.GetObjectKind()))
 		return true
 	}
@@ -127,7 +128,7 @@ var (
 			e.Object.GetObjectKind(), e.Object.GetName(),
 		)
 		log.V(logs.LogVerbose).Info(fmt.Sprintf(
-			"%s did match expected conditions.  Will attempt to reconcile associated ClusterSummaries.",
+			"%s did match expected conditions.  Will attempt to reconcile associated YttSources.",
 			e.Object.GetObjectKind()))
 		return true
 	}
@@ -137,16 +138,16 @@ var (
 			e.Object.GetObjectKind(), e.Object.GetName(),
 		)
 		log.V(logs.LogVerbose).Info(fmt.Sprintf(
-			"%s did not match expected conditions.  Will not attempt to reconcile associated ClusterSummaries.",
+			"%s did not match expected conditions.  Will not attempt to reconcile associated YttSources.",
 			e.Object.GetObjectKind()))
 		return false
 	}
 )
 
 // FluxSourcePredicates predicates for GitRepository/OCIRepository/Bucket.
-// ClusterProfileReconciler watches GitRepository/OCIRepository/Bucket events and
+// YttSourceReconciler watches GitRepository/OCIRepository/Bucket events and
 // react to those by reconciling itself based on following predicates
-func FluxSourcePredicates(logger logr.Logger) predicate.Funcs {
+func FluxSourcePredicates(s *runtime.Scheme, logger logr.Logger) predicate.Funcs {
 	return predicate.Funcs{
 		UpdateFunc: func(e event.UpdateEvent) bool {
 			log := logger.WithValues("predicate", "updateEvent",
@@ -154,15 +155,15 @@ func FluxSourcePredicates(logger logr.Logger) predicate.Funcs {
 				"source", e.ObjectNew.GetName(),
 			)
 
-			if hasArtifactChanged(e) {
+			if hasArtifactChanged(s, e) {
 				log.V(logs.LogInfo).Info(
-					"Source artifact has changed.  Will attempt to reconcile associated ClusterProfiles.")
+					"Source artifact has changed.  Will attempt to reconcile associated YttSources.")
 				return true
 			}
 
 			// otherwise, return false
 			log.V(logs.LogInfo).Info(
-				"GitRepository did not match expected conditions.  Will not attempt to reconcile associated ClusterProfiles.")
+				"GitRepository did not match expected conditions.  Will not attempt to reconcile associated YttSources.")
 			return false
 		},
 		CreateFunc: func(e event.CreateEvent) bool {
@@ -172,7 +173,7 @@ func FluxSourcePredicates(logger logr.Logger) predicate.Funcs {
 			)
 
 			log.V(logs.LogVerbose).Info(
-				"Source did match expected conditions.  Will attempt to reconcile associated ClusterProfiles.")
+				"Source did match expected conditions.  Will attempt to reconcile associated YttSources.")
 			return true
 		},
 		DeleteFunc: func(e event.DeleteEvent) bool {
@@ -181,7 +182,7 @@ func FluxSourcePredicates(logger logr.Logger) predicate.Funcs {
 				"source", e.Object.GetName(),
 			)
 			log.V(logs.LogVerbose).Info(
-				"Source deleted.  Will attempt to reconcile associated ClusterProfiles.")
+				"Source deleted.  Will attempt to reconcile associated YttSources.")
 			return true
 		},
 		GenericFunc: func(e event.GenericEvent) bool {
@@ -190,14 +191,18 @@ func FluxSourcePredicates(logger logr.Logger) predicate.Funcs {
 				"source", e.Object.GetName(),
 			)
 			log.V(logs.LogVerbose).Info(
-				"Source did not match expected conditions.  Will not attempt to reconcile associated ClusterProfiles.")
+				"Source did not match expected conditions.  Will not attempt to reconcile associated YttSources.")
 			return false
 		},
 	}
 }
 
-func hasArtifactChanged(e event.UpdateEvent) bool {
-	switch e.ObjectNew.GetObjectKind().GroupVersionKind().Kind {
+func hasArtifactChanged(s *runtime.Scheme, e event.UpdateEvent) bool {
+	object := e.ObjectNew
+
+	addTypeInformationToObject(s, object)
+
+	switch object.GetObjectKind().GroupVersionKind().Kind {
 	case sourcev1.GitRepositoryKind:
 		newGitRepo := e.ObjectNew.(*sourcev1.GitRepository)
 		oldGitRepo := e.ObjectOld.(*sourcev1.GitRepository)

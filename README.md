@@ -6,6 +6,8 @@ A YTT Carvel controller. It can fetch YTT files from:
 process those files programmatically invoking Carvel `ytt` and store the output in its Status section.
 [Sveltos addon-manager](https://github.com/projectsveltos/addon-manager) can then be used to deploy the output of the ytt-controller in all selected managed clusters.
 
+## Using Flux GitRepository
+
 For instance, this Github repository https://github.com/gianlucam76/ytt-examples contains ytt files. 
 You can use Flux to sync from it and then simply post this [YttSource](https://github.com/gianlucam76/ytt-controller/blob/main/api/v1alpha1/yttsource_types.go) CRD instance.
 The ytt-controller will detect when Flux has synced the repo (and anytime there is a change), will programatically invoke ytt and store the outcome in its Status.Resources field.

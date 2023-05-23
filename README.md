@@ -197,4 +197,4 @@ status:
       db_password: staging-password
 ```
 
-At this point [Sveltos addon-manager](https://github.com/projectsveltos/addon-manager) to use the output of the ytt-controller and deploy those resources in all selected managed clusters.
+At this point [Sveltos addon-manager](https://github.com/projectsveltos/addon-manager) to use the output of the ytt-controller and deploy those resources in all selected managed clusters. To know more refer to [Sveltos documentation](https://projectsveltos.github.io/sveltos/ytt_extension/)

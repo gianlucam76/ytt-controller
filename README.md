@@ -6,6 +6,8 @@ A YTT Carvel controller. It can fetch YTT files from:
 process those files programmatically invoking Carvel `ytt` and store the output in its Status section.
 [Sveltos addon-manager](https://github.com/projectsveltos/addon-manager) can then be used to deploy the output of the ytt-controller in all selected managed clusters.
 
+<img src="https://github.com/projectsveltos/sveltos/blob/e045d8cb059ac7796a00470a61c5759f1389746f/docs/assets/flux-ytt-sveltos.png">
+
 ## Install
 
 ```bash
@@ -198,6 +200,7 @@ status:
 ```
 
 At this point [Sveltos addon-manager](https://github.com/projectsveltos/addon-manager) to use the output of the ytt-controller and deploy those resources in all selected managed clusters. To know more refer to [Sveltos documentation](https://projectsveltos.github.io/sveltos/ytt_extension/)
+
 
 ## Contributing 
 

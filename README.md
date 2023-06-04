@@ -202,7 +202,7 @@ status:
 At this point [Sveltos addon-manager](https://github.com/projectsveltos/addon-manager) to use the output of the ytt-controller and deploy those resources in all selected managed clusters. To know more refer to [Sveltos documentation](https://projectsveltos.github.io/sveltos/ytt_extension/)
 
 
-## Contributing 
+## Contributing
 
 ❤️ Your contributions are always welcome! If you want to contribute, have questions, noticed any bug or want to get the latest project news, you can connect with us in the following ways:
 

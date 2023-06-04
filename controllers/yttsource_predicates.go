@@ -31,7 +31,7 @@ import (
 	logs "github.com/projectsveltos/libsveltos/lib/logsettings"
 )
 
-// ConfigMapPredicates predicates for ConfigMaps. ClusterSummaryReconciler watches ConfigMap events
+// ConfigMapPredicates predicates for ConfigMaps. YttSourceReconciler watches ConfigMap events
 // and react to those by reconciling itself based on following predicates
 func ConfigMapPredicates(logger logr.Logger) predicate.Funcs {
 	return predicate.Funcs{
@@ -71,7 +71,7 @@ func ConfigMapPredicates(logger logr.Logger) predicate.Funcs {
 	}
 }
 
-// SecretPredicates predicates for Secrets. ClusterSummaryReconciler watches Secret events
+// SecretPredicates predicates for Secrets. YttSourceReconciler watches Secret events
 // and react to those by reconciling itself based on following predicates
 func SecretPredicates(logger logr.Logger) predicate.Funcs {
 	return predicate.Funcs{

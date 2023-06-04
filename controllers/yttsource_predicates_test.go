@@ -108,7 +108,7 @@ var _ = Describe("YttSource Predicates: ConfigMapPredicates", func() {
 	})
 })
 
-var _ = Describe("Clustersummary Predicates: SecretPredicates", func() {
+var _ = Describe("YttSource Predicates: SecretPredicates", func() {
 	var logger logr.Logger
 	var secret *corev1.Secret
 

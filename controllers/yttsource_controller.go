@@ -100,7 +100,7 @@ func (r *YttSourceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 		return reconcile.Result{}, errors.Wrap(err, "failed to init patch helper")
 	}
 
-	// Always close the scope when exiting this function so we can persist any ClusterSummary
+	// Always close the scope when exiting this function so we can persist any YttSource
 	// changes.
 	defer func() {
 		err = r.Close(ctx, yttSource, helper)
@@ -115,7 +115,7 @@ func (r *YttSourceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 		return reconcile.Result{}, nil
 	}
 
-	// Handle non-deleted clusterSummary
+	// Handle non-deleted YttSource
 	var resources string
 	resources, err = r.reconcileNormal(ctx, yttSource, logger)
 	if err != nil {
@@ -205,7 +205,7 @@ func (r *YttSourceReconciler) SetupWithManager(mgr ctrl.Manager,
 	}
 
 	// When ConfigMap changes, according to ConfigMapPredicates,
-	// one or more ClusterSummaries need to be reconciled.
+	// one or more YttSources need to be reconciled.
 	err = c.Watch(&source.Kind{Type: &corev1.ConfigMap{}},
 		handler.EnqueueRequestsFromMapFunc(r.requeueYttSourceForReference),
 		ConfigMapPredicates(mgr.GetLogger().WithValues("predicate", "configmappredicate")),
@@ -215,7 +215,7 @@ func (r *YttSourceReconciler) SetupWithManager(mgr ctrl.Manager,
 	}
 
 	// When Secret changes, according to SecretPredicates,
-	// one or more ClusterSummaries need to be reconciled.
+	// one or more YttSources need to be reconciled.
 	err = c.Watch(&source.Kind{Type: &corev1.Secret{}},
 		handler.EnqueueRequestsFromMapFunc(r.requeueYttSourceForReference),
 		SecretPredicates(mgr.GetLogger().WithValues("predicate", "secretpredicate")),
@@ -225,7 +225,7 @@ func (r *YttSourceReconciler) SetupWithManager(mgr ctrl.Manager,
 }
 
 func (r *YttSourceReconciler) WatchForFlux(mgr ctrl.Manager, c controller.Controller) error {
-	// When a Flux source (GitRepository/OCIRepository/Bucket) changes, one or more ClusterSummaries
+	// When a Flux source (GitRepository/OCIRepository/Bucket) changes, one or more YttSources
 	// need to be reconciled.
 
 	err := c.Watch(&source.Kind{Type: &sourcev1.GitRepository{}},
@@ -289,7 +289,7 @@ func (r *YttSourceReconciler) updateMaps(yttSource *extensionv1alpha1.YttSource,
 	// For currently referenced instance, add YttSource as consumer
 	r.getReferenceMapForEntry(ref).Insert(yttSourceInfo)
 
-	// For each resource not reference anymore, remove ClusterSummary as consumer
+	// For each resource not reference anymore, remove YttSource as consumer
 	for i := range toBeRemoved {
 		referencedResource := toBeRemoved[i]
 		r.getReferenceMapForEntry(&referencedResource).Erase(
@@ -297,7 +297,7 @@ func (r *YttSourceReconciler) updateMaps(yttSource *extensionv1alpha1.YttSource,
 		)
 	}
 
-	// Update list of resources currently referenced by ClusterSummary
+	// Update list of resources currently referenced by YttSource
 	r.YttSourceMap[yttSourceName] = currentReference
 }
 

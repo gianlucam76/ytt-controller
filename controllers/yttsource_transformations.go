@@ -38,7 +38,7 @@ func (r *YttSourceReconciler) requeueYttSourceForFluxSources(
 
 	logger := klogr.New().WithValues(
 		"objectMapper",
-		"requeueClusterSummaryForFluxSources",
+		"requeueYttSourceForFluxSources",
 		"reference",
 		o.GetName(),
 	)
@@ -105,7 +105,7 @@ func (r *YttSourceReconciler) requeueYttSourceForReference(
 
 	logger := klogr.New().WithValues(
 		"objectMapper",
-		"requeueClusterSummaryForConfigMap",
+		"requeueYttSourceForConfigMap",
 		"reference",
 		o.GetName(),
 	)

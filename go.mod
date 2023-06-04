@@ -1,6 +1,6 @@
 module github.com/gianlucam76/ytt-controller
 
-go 1.19
+go 1.20
 
 require (
 	github.com/TwinProduction/go-color v1.0.0

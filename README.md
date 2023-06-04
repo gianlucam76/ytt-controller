@@ -6,18 +6,6 @@ A YTT Carvel controller. It can fetch YTT files from:
 process those files programmatically invoking Carvel `ytt` and store the output in its Status section.
 [Sveltos addon-manager](https://github.com/projectsveltos/addon-manager) can then be used to deploy the output of the ytt-controller in all selected managed clusters.
 
-## Install
-
-```bash
-kubectl apply -f https://raw.githubusercontent.com/gianlucam76/ytt-controller/main/manifest/manifest.yaml
-```
-
-or if you want a specific version
-
-```bash
-kubectl apply -f https://raw.githubusercontent.com/gianlucam76/ytt-controller/<tag>/manifest/manifest.yaml
-```
-
 ## Using Flux GitRepository
 
 For instance, this Github repository https://github.com/gianlucam76/ytt-examples contains ytt files. 
@@ -197,13 +185,4 @@ status:
       db_password: staging-password
 ```
 
-At this point [Sveltos addon-manager](https://github.com/projectsveltos/addon-manager) to use the output of the ytt-controller and deploy those resources in all selected managed clusters. To know more refer to [Sveltos documentation](https://projectsveltos.github.io/sveltos/ytt_extension/)
-
-## Contributing 
-
-❤️ Your contributions are always welcome! If you want to contribute, have questions, noticed any bug or want to get the latest project news, you can connect with us in the following ways:
-
-1. Read contributing [guidelines](CONTRIBUTING.md)
-2. Open a bug/feature enhancement on github [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/projectsveltos/addon-manager/issues)
-3. Chat with us on the Slack in the #projectsveltos channel [![Slack](https://img.shields.io/badge/join%20slack-%23projectsveltos-brighteen)](https://join.slack.com/t/projectsveltos/shared_invite/zt-1hraownbr-W8NTs6LTimxLPB8Erj8Q6Q)
-4. [Contact Us](mailto:support@projectsveltos.io)
+At this point [Sveltos addon-manager](https://github.com/projectsveltos/addon-manager) to use the output of the ytt-controller and deploy those resources in all selected managed clusters.

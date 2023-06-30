@@ -17,6 +17,7 @@ limitations under the License.
 package controllers_test
 
 import (
+	"context"
 	"sync"
 
 	sourcev1 "github.com/fluxcd/source-controller/api/v1"
@@ -96,7 +97,7 @@ var _ = Describe("YttSourceTransformation map functions", func() {
 			Kind: extensionv1alpha1.YttSourceKind, Namespace: yttSource0.Namespace, Name: yttSource0.Name})
 		reconciler.ReferenceMap[key] = &set
 
-		requests := controllers.RequeueYttSourceForReference(reconciler, configMap)
+		requests := controllers.RequeueYttSourceForReference(reconciler, context.TODO(), configMap)
 		Expect(requests).To(HaveLen(1))
 		Expect(requests[0].Name).To(Equal(yttSource0.Name))
 		Expect(requests[0].Namespace).To(Equal(yttSource0.Namespace))
@@ -105,7 +106,7 @@ var _ = Describe("YttSourceTransformation map functions", func() {
 			Kind: extensionv1alpha1.YttSourceKind, Namespace: yttSource1.Namespace, Name: yttSource1.Name})
 		reconciler.ReferenceMap[key] = &set
 
-		requests = controllers.RequeueYttSourceForReference(reconciler, configMap)
+		requests = controllers.RequeueYttSourceForReference(reconciler, context.TODO(), configMap)
 		Expect(requests).To(HaveLen(2))
 		Expect(requests).To(ContainElement(
 			reconcile.Request{NamespacedName: types.NamespacedName{Namespace: yttSource0.Namespace, Name: yttSource0.Name}}))
@@ -173,7 +174,7 @@ var _ = Describe("YttSourceTransformation map functions", func() {
 			Kind: extensionv1alpha1.YttSourceKind, Namespace: yttSource0.Namespace, Name: yttSource0.Name})
 		reconciler.ReferenceMap[key] = &set
 
-		requests := controllers.RequeueYttSourceForReference(reconciler, gitRepo)
+		requests := controllers.RequeueYttSourceForReference(reconciler, context.TODO(), gitRepo)
 		Expect(requests).To(HaveLen(1))
 		Expect(requests[0].Name).To(Equal(yttSource0.Name))
 		Expect(requests[0].Namespace).To(Equal(yttSource0.Namespace))
@@ -182,7 +183,7 @@ var _ = Describe("YttSourceTransformation map functions", func() {
 			Kind: extensionv1alpha1.YttSourceKind, Namespace: yttSource1.Namespace, Name: yttSource1.Name})
 		reconciler.ReferenceMap[key] = &set
 
-		requests = controllers.RequeueYttSourceForReference(reconciler, gitRepo)
+		requests = controllers.RequeueYttSourceForReference(reconciler, context.TODO(), gitRepo)
 		Expect(requests).To(HaveLen(2))
 		Expect(requests).To(ContainElement(
 			reconcile.Request{NamespacedName: types.NamespacedName{Namespace: yttSource0.Namespace, Name: yttSource0.Name}}))

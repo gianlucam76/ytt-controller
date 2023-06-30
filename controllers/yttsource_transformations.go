@@ -17,6 +17,7 @@ limitations under the License.
 package controllers
 
 import (
+	"context"
 	"fmt"
 
 	corev1 "k8s.io/api/core/v1"
@@ -33,7 +34,7 @@ import (
 )
 
 func (r *YttSourceReconciler) requeueYttSourceForFluxSources(
-	o client.Object,
+	ctx context.Context, o client.Object,
 ) []reconcile.Request {
 
 	logger := klogr.New().WithValues(
@@ -100,7 +101,7 @@ func (r *YttSourceReconciler) requeueYttSourceForFluxSources(
 }
 
 func (r *YttSourceReconciler) requeueYttSourceForReference(
-	o client.Object,
+	ctx context.Context, o client.Object,
 ) []reconcile.Request {
 
 	logger := klogr.New().WithValues(

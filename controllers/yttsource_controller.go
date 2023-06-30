@@ -206,7 +206,7 @@ func (r *YttSourceReconciler) SetupWithManager(mgr ctrl.Manager,
 
 	// When ConfigMap changes, according to ConfigMapPredicates,
 	// one or more YttSources need to be reconciled.
-	err = c.Watch(&source.Kind{Type: &corev1.ConfigMap{}},
+	err = c.Watch(source.Kind(mgr.GetCache(), &corev1.ConfigMap{}),
 		handler.EnqueueRequestsFromMapFunc(r.requeueYttSourceForReference),
 		ConfigMapPredicates(mgr.GetLogger().WithValues("predicate", "configmappredicate")),
 	)
@@ -216,7 +216,7 @@ func (r *YttSourceReconciler) SetupWithManager(mgr ctrl.Manager,
 
 	// When Secret changes, according to SecretPredicates,
 	// one or more YttSources need to be reconciled.
-	err = c.Watch(&source.Kind{Type: &corev1.Secret{}},
+	err = c.Watch(source.Kind(mgr.GetCache(), &corev1.Secret{}),
 		handler.EnqueueRequestsFromMapFunc(r.requeueYttSourceForReference),
 		SecretPredicates(mgr.GetLogger().WithValues("predicate", "secretpredicate")),
 	)
@@ -228,7 +228,7 @@ func (r *YttSourceReconciler) WatchForFlux(mgr ctrl.Manager, c controller.Contro
 	// When a Flux source (GitRepository/OCIRepository/Bucket) changes, one or more YttSources
 	// need to be reconciled.
 
-	err := c.Watch(&source.Kind{Type: &sourcev1.GitRepository{}},
+	err := c.Watch(source.Kind(mgr.GetCache(), &sourcev1.GitRepository{}),
 		handler.EnqueueRequestsFromMapFunc(r.requeueYttSourceForFluxSources),
 		FluxSourcePredicates(r.Scheme, mgr.GetLogger().WithValues("predicate", "fluxsourcepredicate")),
 	)
@@ -236,7 +236,7 @@ func (r *YttSourceReconciler) WatchForFlux(mgr ctrl.Manager, c controller.Contro
 		return err
 	}
 
-	err = c.Watch(&source.Kind{Type: &sourcev1b2.OCIRepository{}},
+	err = c.Watch(source.Kind(mgr.GetCache(), &sourcev1b2.OCIRepository{}),
 		handler.EnqueueRequestsFromMapFunc(r.requeueYttSourceForFluxSources),
 		FluxSourcePredicates(r.Scheme, mgr.GetLogger().WithValues("predicate", "fluxsourcepredicate")),
 	)
@@ -244,7 +244,7 @@ func (r *YttSourceReconciler) WatchForFlux(mgr ctrl.Manager, c controller.Contro
 		return err
 	}
 
-	return c.Watch(&source.Kind{Type: &sourcev1b2.Bucket{}},
+	return c.Watch(source.Kind(mgr.GetCache(), &sourcev1b2.Bucket{}),
 		handler.EnqueueRequestsFromMapFunc(r.requeueYttSourceForFluxSources),
 		FluxSourcePredicates(r.Scheme, mgr.GetLogger().WithValues("predicate", "fluxsourcepredicate")),
 	)

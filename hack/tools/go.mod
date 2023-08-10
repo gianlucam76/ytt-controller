@@ -7,7 +7,7 @@ require (
 	github.com/onsi/ginkgo/v2 v2.11.0
 	golang.org/x/oauth2 v0.9.0
 	k8s.io/client-go v0.27.2
-	sigs.k8s.io/controller-runtime/tools/setup-envtest v0.0.0-20230620070423-a784ee78d04b
+	sigs.k8s.io/controller-runtime/tools/setup-envtest v0.0.0-20230810005131-5aa6a71fc79d
 	sigs.k8s.io/controller-tools v0.12.0
 	sigs.k8s.io/kind v0.20.0
 )
@@ -42,7 +42,7 @@ require (
 	github.com/spf13/cobra v1.7.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
-	go.uber.org/goleak v1.2.0 // indirect
+	go.uber.org/goleak v1.2.1 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
 	go.uber.org/zap v1.24.0 // indirect
 	golang.org/x/mod v0.10.0 // indirect

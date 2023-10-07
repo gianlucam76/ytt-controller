@@ -11,7 +11,7 @@ require (
 	github.com/onsi/ginkgo/v2 v2.11.0
 	github.com/onsi/gomega v1.27.8
 	github.com/pkg/errors v0.9.1
-	github.com/projectsveltos/libsveltos v0.16.1-0.20230918112609-93a8300779a8
+	github.com/projectsveltos/libsveltos v0.18.1-0.20231007130619-4f3be4950c13
 	github.com/spf13/pflag v1.0.5
 	github.com/vmware-tanzu/carvel-ytt v0.45.3
 	k8s.io/api v0.27.2
@@ -20,7 +20,7 @@ require (
 	k8s.io/client-go v0.27.2
 	k8s.io/component-base v0.27.2
 	k8s.io/klog/v2 v2.90.1
-	sigs.k8s.io/cluster-api v1.5.1
+	sigs.k8s.io/cluster-api v1.5.2
 	sigs.k8s.io/controller-runtime v0.15.1
 )
 

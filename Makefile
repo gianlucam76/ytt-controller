@@ -69,6 +69,7 @@ KIND := $(TOOLS_BIN_DIR)/kind
 KUBECTL := $(TOOLS_BIN_DIR)/kubectl
 
 GOLANGCI_LINT_VERSION := "v1.52.2"
+CLUSTERCTL_VERSION := "v1.5.3"
 
 $(CONTROLLER_GEN): $(TOOLS_DIR)/go.mod # Build controller-gen from tools folder.
 	cd $(TOOLS_DIR); $(GOBUILD) -tags=tools -o $(subst $(TOOLS_DIR)/hack/tools/,,$@) sigs.k8s.io/controller-tools/cmd/controller-gen
@@ -92,8 +93,9 @@ $(KIND): $(TOOLS_DIR)/go.mod
 	cd $(TOOLS_DIR) && $(GOBUILD) -tags tools -o $(subst $(TOOLS_DIR)/hack/tools/,,$@) sigs.k8s.io/kind
 
 $(CLUSTERCTL): $(TOOLS_DIR)/go.mod ## Build clusterctl binary
-	cd $(TOOLS_DIR); $(GOBUILD) -trimpath  -ldflags $(CLUSTERAPI_LDFLAGS) -o $(subst $(TOOLS_DIR)/hack/tools/,,$@) sigs.k8s.io/cluster-api/cmd/clusterctl
-	mkdir -p $(HOME)/.cluster-api # create cluster api init directory, if not present	
+	curl -L https://github.com/kubernetes-sigs/cluster-api/releases/download/$(CLUSTERCTL_VERSION)/clusterctl-$(OS)-$(ARCH) -o $@
+	chmod +x $@
+	mkdir -p $(HOME)/.cluster-api # create cluster api init directory, if not present
 
 $(KUBECTL):
 	curl -L https://storage.googleapis.com/kubernetes-release/release/$(K8S_LATEST_VER)/bin/$(OS)/$(ARCH)/kubectl -o $@

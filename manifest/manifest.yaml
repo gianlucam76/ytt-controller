@@ -94,44 +94,6 @@ metadata:
   namespace: ytt-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: ytt-leader-election-role
-  namespace: ytt-system
-rules:
-- apiGroups:
-  - ""
-  resources:
-  - configmaps
-  verbs:
-  - get
-  - list
-  - watch
-  - create
-  - update
-  - patch
-  - delete
-- apiGroups:
-  - coordination.k8s.io
-  resources:
-  - leases
-  verbs:
-  - get
-  - list
-  - watch
-  - create
-  - update
-  - patch
-  - delete
-- apiGroups:
-  - ""
-  resources:
-  - events
-  verbs:
-  - create
-  - patch
----
-apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: ytt-manager-role
@@ -264,20 +226,6 @@ rules:
   - create
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: ytt-leader-election-rolebinding
-  namespace: ytt-system
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: ytt-leader-election-role
-subjects:
-- kind: ServiceAccount
-  name: ytt-controller
-  namespace: ytt-system
----
-apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: ytt-manager-rolebinding
@@ -371,7 +319,6 @@ spec:
       - args:
         - --health-probe-bind-address=:8081
         - --metrics-bind-address=127.0.0.1:8080
-        - --leader-elect
         - --v=5
         command:
         - /manager

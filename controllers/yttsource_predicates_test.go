@@ -26,7 +26,7 @@ import (
 	"github.com/go-logr/logr"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/klog/v2/klogr"
+	"k8s.io/klog/v2/textlogger"
 	"sigs.k8s.io/controller-runtime/pkg/event"
 
 	"github.com/gianlucam76/ytt-controller/controllers"
@@ -37,7 +37,7 @@ var _ = Describe("YttSource Predicates: ConfigMapPredicates", func() {
 	var configMap *corev1.ConfigMap
 
 	BeforeEach(func() {
-		logger = klogr.New()
+		logger = textlogger.NewLogger(textlogger.NewConfig())
 		configMap = &corev1.ConfigMap{
 			ObjectMeta: metav1.ObjectMeta{
 				Name: randomString(),
@@ -113,7 +113,7 @@ var _ = Describe("YttSource Predicates: SecretPredicates", func() {
 	var secret *corev1.Secret
 
 	BeforeEach(func() {
-		logger = klogr.New()
+		logger = textlogger.NewLogger(textlogger.NewConfig())
 		secret = &corev1.Secret{
 			ObjectMeta: metav1.ObjectMeta{
 				Name: randomString(),
@@ -188,7 +188,7 @@ var _ = Describe("YttSource Predicates: FluxSourcePredicates", func() {
 	var gitRepository *sourcev1.GitRepository
 
 	BeforeEach(func() {
-		logger = klogr.New()
+		logger = textlogger.NewLogger(textlogger.NewConfig())
 		gitRepository = &sourcev1.GitRepository{
 			ObjectMeta: metav1.ObjectMeta{
 				Name:      "flux" + randomString(),

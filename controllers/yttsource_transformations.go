@@ -33,8 +33,29 @@ import (
 	logs "github.com/projectsveltos/libsveltos/lib/logsettings"
 )
 
-func (r *YttSourceReconciler) requeueYttSourceForFluxSources(
-	ctx context.Context, o client.Object,
+func (r *YttSourceReconciler) requeueYttSourceForFluxGitRepository(
+	ctx context.Context, o *sourcev1.GitRepository,
+) []reconcile.Request {
+
+	return r.requeueYttSourceForFluxSource(ctx, o)
+}
+
+func (r *YttSourceReconciler) requeueYttSourceForFluxOCIRepository(
+	ctx context.Context, o *sourcev1b2.OCIRepository,
+) []reconcile.Request {
+
+	return r.requeueYttSourceForFluxSource(ctx, o)
+}
+
+func (r *YttSourceReconciler) requeueYttSourceForFluxBucket(
+	ctx context.Context, o *sourcev1b2.Bucket,
+) []reconcile.Request {
+
+	return r.requeueYttSourceForFluxSource(ctx, o)
+}
+
+func (r *YttSourceReconciler) requeueYttSourceForFluxSource(
+	_ context.Context, o client.Object,
 ) []reconcile.Request {
 
 	logger := textlogger.NewLogger(textlogger.NewConfig()).WithValues(

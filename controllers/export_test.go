@@ -21,8 +21,7 @@ var (
 )
 
 var (
-	RequeueYttSourceForReference   = (*YttSourceReconciler).requeueYttSourceForReference
-	RequeueYttSourceForFluxSources = (*YttSourceReconciler).requeueYttSourceForFluxSources
+	RequeueYttSourceForReference = (*YttSourceReconciler).requeueYttSourceForReference
 )
 
 var (

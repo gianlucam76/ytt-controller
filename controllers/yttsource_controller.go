@@ -47,9 +47,9 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 	"sigs.k8s.io/controller-runtime/pkg/source"
 
-	extensionv1alpha1 "github.com/gianlucam76/ytt-controller/api/v1alpha1"
+	extensionv1beta1 "github.com/gianlucam76/ytt-controller/api/v1beta1"
 
-	libsveltosv1alpha1 "github.com/projectsveltos/libsveltos/api/v1alpha1"
+	libsveltosv1beta1 "github.com/projectsveltos/libsveltos/api/v1beta1"
 	logs "github.com/projectsveltos/libsveltos/lib/logsettings"
 	libsveltosset "github.com/projectsveltos/libsveltos/lib/set"
 )
@@ -82,7 +82,7 @@ func (r *YttSourceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 	logger.V(logs.LogInfo).Info("Reconciling")
 
 	// Fecth the YttSource instance
-	yttSource := &extensionv1alpha1.YttSource{}
+	yttSource := &extensionv1beta1.YttSource{}
 	if err := r.Get(ctx, req.NamespacedName, yttSource); err != nil {
 		if apierrors.IsNotFound(err) {
 			return reconcile.Result{}, nil
@@ -134,7 +134,7 @@ func (r *YttSourceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 
 func (r *YttSourceReconciler) reconcileNormal(
 	ctx context.Context,
-	yttSource *extensionv1alpha1.YttSource,
+	yttSource *extensionv1beta1.YttSource,
 	logger logr.Logger,
 ) (string, error) {
 
@@ -197,7 +197,7 @@ func (r *YttSourceReconciler) SetupWithManager(mgr ctrl.Manager,
 ) (controller.Controller, error) {
 
 	c, err := ctrl.NewControllerManagedBy(mgr).
-		For(&extensionv1alpha1.YttSource{}).
+		For(&extensionv1beta1.YttSource{}).
 		WithOptions(controller.Options{
 			MaxConcurrentReconciles: 5,
 		}).
@@ -265,7 +265,7 @@ func (r *YttSourceReconciler) getReferenceMapForEntry(entry *corev1.ObjectRefere
 	return s
 }
 
-func (r *YttSourceReconciler) getCurrentReference(yttSource *extensionv1alpha1.YttSource) *corev1.ObjectReference {
+func (r *YttSourceReconciler) getCurrentReference(yttSource *extensionv1beta1.YttSource) *corev1.ObjectReference {
 	return &corev1.ObjectReference{
 		APIVersion: getReferenceAPIVersion(yttSource),
 		Kind:       yttSource.Spec.Kind,
@@ -274,7 +274,7 @@ func (r *YttSourceReconciler) getCurrentReference(yttSource *extensionv1alpha1.Y
 	}
 }
 
-func (r *YttSourceReconciler) updateMaps(yttSource *extensionv1alpha1.YttSource, logger logr.Logger) {
+func (r *YttSourceReconciler) updateMaps(yttSource *extensionv1beta1.YttSource, logger logr.Logger) {
 	logger.V(logs.LogDebug).Info("update policy map")
 	ref := r.getCurrentReference(yttSource)
 
@@ -307,7 +307,7 @@ func (r *YttSourceReconciler) updateMaps(yttSource *extensionv1alpha1.YttSource,
 	r.YttSourceMap[yttSourceName] = currentReference
 }
 
-func (r *YttSourceReconciler) cleanMaps(yttSource *extensionv1alpha1.YttSource) {
+func (r *YttSourceReconciler) cleanMaps(yttSource *extensionv1beta1.YttSource) {
 	r.PolicyMux.Lock()
 	defer r.PolicyMux.Unlock()
 
@@ -322,13 +322,13 @@ func (r *YttSourceReconciler) cleanMaps(yttSource *extensionv1alpha1.YttSource) 
 }
 
 func (r *YttSourceReconciler) prepareFileSystem(ctx context.Context,
-	yttSource *extensionv1alpha1.YttSource, logger logr.Logger) (string, error) {
+	yttSource *extensionv1beta1.YttSource, logger logr.Logger) (string, error) {
 
 	ref := r.getCurrentReference(yttSource)
 
-	if ref.Kind == string(libsveltosv1alpha1.ConfigMapReferencedResourceKind) {
+	if ref.Kind == string(libsveltosv1beta1.ConfigMapReferencedResourceKind) {
 		return prepareFileSystemWithConfigMap(ctx, r.Client, ref, logger)
-	} else if ref.Kind == string(libsveltosv1alpha1.SecretReferencedResourceKind) {
+	} else if ref.Kind == string(libsveltosv1beta1.SecretReferencedResourceKind) {
 		return prepareFileSystemWithSecret(ctx, r.Client, ref, logger)
 	}
 
@@ -482,7 +482,7 @@ func getSource(ctx context.Context, c client.Client, ref *corev1.ObjectReference
 }
 
 // templatesAsInput conveniently wraps one or more strings, each in a files.File, into a template.Input.
-func templatesAsInput(dirPath string, yttSource *extensionv1alpha1.YttSource,
+func templatesAsInput(dirPath string, yttSource *extensionv1beta1.YttSource,
 	logger logr.Logger) (yttcmd.Input, error) {
 
 	// Get all files in the directory
@@ -541,7 +541,7 @@ type noopWriter struct{}
 func (w noopWriter) Write(data []byte) (int, error) { return len(data), nil }
 
 // Close closes the current scope persisting the YttSource status.
-func (s *YttSourceReconciler) Close(ctx context.Context, yttSource *extensionv1alpha1.YttSource,
+func (s *YttSourceReconciler) Close(ctx context.Context, yttSource *extensionv1beta1.YttSource,
 	patchHelper *patch.Helper) error {
 
 	return patchHelper.Patch(

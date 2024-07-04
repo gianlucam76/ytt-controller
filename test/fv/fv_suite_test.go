@@ -34,7 +34,7 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	extensionv1alpha1 "github.com/gianlucam76/ytt-controller/api/v1alpha1"
+	extensionv1beta1 "github.com/gianlucam76/ytt-controller/api/v1beta1"
 )
 
 var (
@@ -84,7 +84,7 @@ var _ = BeforeSuite(func() {
 
 	Expect(clientgoscheme.AddToScheme(scheme)).To(Succeed())
 	Expect(clusterv1.AddToScheme(scheme)).To(Succeed())
-	Expect(extensionv1alpha1.AddToScheme(scheme)).To(Succeed())
+	Expect(extensionv1beta1.AddToScheme(scheme)).To(Succeed())
 	Expect(sourcev1.AddToScheme(scheme)).To(Succeed())
 
 	var err error

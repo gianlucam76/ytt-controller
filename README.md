@@ -27,7 +27,7 @@ You can use Flux to sync from it and then simply post this [YttSource](https://g
 The ytt-controller will detect when Flux has synced the repo (and anytime there is a change), will programatically invoke ytt and store the outcome in its Status.Resources field.
 
 ```yaml
-apiVersion: extension.projectsveltos.io/v1alpha1
+apiVersion: extension.projectsveltos.io/v1beta1
 kind: YttSource
 metadata:
   name: yttsource-flux
@@ -39,12 +39,12 @@ spec:
 ```
 
 ```yaml
-apiVersion: extension.projectsveltos.io/v1alpha1
+apiVersion: extension.projectsveltos.io/v1beta1
 kind: YttSource
 metadata:
   annotations:
     kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"extension.projectsveltos.io/v1alpha1","kind":"YttSource","metadata":{"annotations":{},"name":"yttsource-flux","namespace":"default"},"spec":{"kind":"GitRepository","name":"flux-system","namespace":"flux-system","path":"./deployment/"}}
+      {"apiVersion":"extension.projectsveltos.io/v1beta1","kind":"YttSource","metadata":{"annotations":{},"name":"yttsource-flux","namespace":"default"},"spec":{"kind":"GitRepository","name":"flux-system","namespace":"flux-system","path":"./deployment/"}}
   creationTimestamp: "2023-05-22T06:20:01Z"
   generation: 1
   name: yttsource-flux
@@ -118,7 +118,7 @@ kubectl create configmap ytt --from-file=ytt.tar.gz=ytt.tar.gz
 Then we can have YttSource reference this ConfigMap instance
 
 ```yaml
-apiVersion: extension.projectsveltos.io/v1alpha1
+apiVersion: extension.projectsveltos.io/v1beta1
 kind: YttSource
 metadata:
   name: yttsource-sample
@@ -132,12 +132,12 @@ spec:
 and the controller will programmatically execute ytt and store the outcome in Status.Results.
 
 ```yaml
-apiVersion: extension.projectsveltos.io/v1alpha1
+apiVersion: extension.projectsveltos.io/v1beta1
 kind: YttSource
 metadata:
   annotations:
     kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"extension.projectsveltos.io/v1alpha1","kind":"YttSource","metadata":{"annotations":{},"name":"yttsource-sample","namespace":"default"},"spec":{"kind":"ConfigMap","name":"ytt","namespace":"default","path":"./"}}
+      {"apiVersion":"extension.projectsveltos.io/v1beta1","kind":"YttSource","metadata":{"annotations":{},"name":"yttsource-sample","namespace":"default"},"spec":{"kind":"ConfigMap","name":"ytt","namespace":"default","path":"./"}}
   creationTimestamp: "2023-05-22T06:27:31Z"
   generation: 1
   name: yttsource-sample

@@ -1,0 +1,4 @@
+## Append samples of your project ##
+resources:
+- extension_v1beta1_yttsource.yaml
+# +kubebuilder:scaffold:manifestskustomizesamples

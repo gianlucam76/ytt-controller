@@ -1,6 +1,9 @@
 apiVersion: extension.projectsveltos.io/v1beta1
 kind: YttSource
 metadata:
+  labels:
+    app.kubernetes.io/name: ytt-controller
+    app.kubernetes.io/managed-by: kustomize
   name: yttsource-sample
 spec:
   # TODO(user): Add fields here

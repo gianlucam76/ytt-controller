@@ -36,9 +36,9 @@ import (
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	extensionv1alpha1 "github.com/gianlucam76/ytt-controller/api/v1alpha1"
+	extensionv1beta1 "github.com/gianlucam76/ytt-controller/api/v1beta1"
 
-	libsveltosv1alpha1 "github.com/projectsveltos/libsveltos/api/v1alpha1"
+	libsveltosv1beta1 "github.com/projectsveltos/libsveltos/api/v1beta1"
 )
 
 //+kubebuilder:rbac:groups=apiextensions.k8s.io,resources=customresourcedefinitions,verbs=get;list;watch
@@ -63,7 +63,7 @@ func InitScheme() (*runtime.Scheme, error) {
 	if err := sourcev1b2.AddToScheme(s); err != nil {
 		return nil, err
 	}
-	if err := extensionv1alpha1.AddToScheme(s); err != nil {
+	if err := extensionv1beta1.AddToScheme(s); err != nil {
 		return nil, err
 	}
 	return s, nil
@@ -101,11 +101,11 @@ func addTypeInformationToObject(scheme *runtime.Scheme, obj client.Object) {
 	}
 }
 
-func getReferenceAPIVersion(yttSource *extensionv1alpha1.YttSource) string {
+func getReferenceAPIVersion(yttSource *extensionv1beta1.YttSource) string {
 	switch yttSource.Spec.Kind {
-	case string(libsveltosv1alpha1.ConfigMapReferencedResourceKind):
+	case string(libsveltosv1beta1.ConfigMapReferencedResourceKind):
 		return corev1.SchemeGroupVersion.String()
-	case string(libsveltosv1alpha1.SecretReferencedResourceKind):
+	case string(libsveltosv1beta1.SecretReferencedResourceKind):
 		return corev1.SchemeGroupVersion.String()
 	case sourcev1b2.OCIRepositoryKind:
 	case sourcev1b2.BucketKind:
@@ -142,8 +142,8 @@ func getSecret(ctx context.Context, c client.Client, secretName types.Namespaced
 		return nil, err
 	}
 
-	if secret.Type != libsveltosv1alpha1.ClusterProfileSecretType {
-		return nil, libsveltosv1alpha1.ErrSecretTypeNotSupported
+	if secret.Type != libsveltosv1beta1.ClusterProfileSecretType {
+		return nil, libsveltosv1beta1.ErrSecretTypeNotSupported
 	}
 
 	return secret, nil

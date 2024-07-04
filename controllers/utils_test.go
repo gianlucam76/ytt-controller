@@ -23,7 +23,7 @@ import (
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 	"sigs.k8s.io/cluster-api/util"
 
-	extensionv1alpha1 "github.com/gianlucam76/ytt-controller/api/v1alpha1"
+	extensionv1beta1 "github.com/gianlucam76/ytt-controller/api/v1beta1"
 )
 
 func randomString() string {
@@ -42,7 +42,7 @@ func setupScheme() (*runtime.Scheme, error) {
 	if err := sourcev1b2.AddToScheme(s); err != nil {
 		return nil, err
 	}
-	if err := extensionv1alpha1.AddToScheme(s); err != nil {
+	if err := extensionv1beta1.AddToScheme(s); err != nil {
 		return nil, err
 	}
 

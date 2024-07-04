@@ -31,10 +31,10 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client/fake"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
-	extensionv1alpha1 "github.com/gianlucam76/ytt-controller/api/v1alpha1"
+	extensionv1beta1 "github.com/gianlucam76/ytt-controller/api/v1beta1"
 	"github.com/gianlucam76/ytt-controller/controllers"
 
-	libsveltosv1alpha1 "github.com/projectsveltos/libsveltos/api/v1alpha1"
+	libsveltosv1beta1 "github.com/projectsveltos/libsveltos/api/v1beta1"
 	libsveltosset "github.com/projectsveltos/libsveltos/lib/set"
 )
 
@@ -49,27 +49,27 @@ var _ = Describe("YttSourceTransformation map functions", func() {
 
 		controllers.AddTypeInformationToObject(scheme, configMap)
 
-		yttSource0 := &extensionv1alpha1.YttSource{
+		yttSource0 := &extensionv1beta1.YttSource{
 			ObjectMeta: metav1.ObjectMeta{
 				Name:      randomString(),
 				Namespace: randomString(),
 			},
-			Spec: extensionv1alpha1.YttSourceSpec{
+			Spec: extensionv1beta1.YttSourceSpec{
 				Namespace: configMap.Namespace,
 				Name:      configMap.Name,
-				Kind:      string(libsveltosv1alpha1.ConfigMapReferencedResourceKind),
+				Kind:      string(libsveltosv1beta1.ConfigMapReferencedResourceKind),
 			},
 		}
 
-		yttSource1 := &extensionv1alpha1.YttSource{
+		yttSource1 := &extensionv1beta1.YttSource{
 			ObjectMeta: metav1.ObjectMeta{
 				Name:      randomString(),
 				Namespace: randomString(),
 			},
-			Spec: extensionv1alpha1.YttSourceSpec{
+			Spec: extensionv1beta1.YttSourceSpec{
 				Namespace: randomString(),
 				Name:      configMap.Name,
-				Kind:      string(libsveltosv1alpha1.ConfigMapReferencedResourceKind),
+				Kind:      string(libsveltosv1beta1.ConfigMapReferencedResourceKind),
 			},
 		}
 
@@ -91,10 +91,10 @@ var _ = Describe("YttSourceTransformation map functions", func() {
 
 		set := libsveltosset.Set{}
 		key := corev1.ObjectReference{APIVersion: configMap.APIVersion,
-			Kind: string(libsveltosv1alpha1.ConfigMapReferencedResourceKind), Namespace: configMap.Namespace, Name: configMap.Name}
+			Kind: string(libsveltosv1beta1.ConfigMapReferencedResourceKind), Namespace: configMap.Namespace, Name: configMap.Name}
 
-		set.Insert(&corev1.ObjectReference{APIVersion: extensionv1alpha1.GroupVersion.String(),
-			Kind: extensionv1alpha1.YttSourceKind, Namespace: yttSource0.Namespace, Name: yttSource0.Name})
+		set.Insert(&corev1.ObjectReference{APIVersion: extensionv1beta1.GroupVersion.String(),
+			Kind: extensionv1beta1.YttSourceKind, Namespace: yttSource0.Namespace, Name: yttSource0.Name})
 		reconciler.ReferenceMap[key] = &set
 
 		requests := controllers.RequeueYttSourceForReference(reconciler, context.TODO(), configMap)
@@ -102,8 +102,8 @@ var _ = Describe("YttSourceTransformation map functions", func() {
 		Expect(requests[0].Name).To(Equal(yttSource0.Name))
 		Expect(requests[0].Namespace).To(Equal(yttSource0.Namespace))
 
-		set.Insert(&corev1.ObjectReference{APIVersion: extensionv1alpha1.GroupVersion.String(),
-			Kind: extensionv1alpha1.YttSourceKind, Namespace: yttSource1.Namespace, Name: yttSource1.Name})
+		set.Insert(&corev1.ObjectReference{APIVersion: extensionv1beta1.GroupVersion.String(),
+			Kind: extensionv1beta1.YttSourceKind, Namespace: yttSource1.Namespace, Name: yttSource1.Name})
 		reconciler.ReferenceMap[key] = &set
 
 		requests = controllers.RequeueYttSourceForReference(reconciler, context.TODO(), configMap)
@@ -126,24 +126,24 @@ var _ = Describe("YttSourceTransformation map functions", func() {
 
 		controllers.AddTypeInformationToObject(scheme, gitRepo)
 
-		yttSource0 := &extensionv1alpha1.YttSource{
+		yttSource0 := &extensionv1beta1.YttSource{
 			ObjectMeta: metav1.ObjectMeta{
 				Name:      randomString(),
 				Namespace: randomString(),
 			},
-			Spec: extensionv1alpha1.YttSourceSpec{
+			Spec: extensionv1beta1.YttSourceSpec{
 				Namespace: gitRepo.Namespace,
 				Name:      gitRepo.Name,
 				Kind:      sourcev1.GitRepositoryKind,
 			},
 		}
 
-		yttSource1 := &extensionv1alpha1.YttSource{
+		yttSource1 := &extensionv1beta1.YttSource{
 			ObjectMeta: metav1.ObjectMeta{
 				Name:      randomString(),
 				Namespace: randomString(),
 			},
-			Spec: extensionv1alpha1.YttSourceSpec{
+			Spec: extensionv1beta1.YttSourceSpec{
 				Namespace: gitRepo.Namespace,
 				Name:      randomString(),
 				Kind:      sourcev1.GitRepositoryKind,
@@ -170,8 +170,8 @@ var _ = Describe("YttSourceTransformation map functions", func() {
 		key := corev1.ObjectReference{APIVersion: gitRepo.APIVersion,
 			Kind: sourcev1.GitRepositoryKind, Namespace: gitRepo.Namespace, Name: gitRepo.Name}
 
-		set.Insert(&corev1.ObjectReference{APIVersion: extensionv1alpha1.GroupVersion.String(),
-			Kind: extensionv1alpha1.YttSourceKind, Namespace: yttSource0.Namespace, Name: yttSource0.Name})
+		set.Insert(&corev1.ObjectReference{APIVersion: extensionv1beta1.GroupVersion.String(),
+			Kind: extensionv1beta1.YttSourceKind, Namespace: yttSource0.Namespace, Name: yttSource0.Name})
 		reconciler.ReferenceMap[key] = &set
 
 		requests := controllers.RequeueYttSourceForReference(reconciler, context.TODO(), gitRepo)
@@ -179,8 +179,8 @@ var _ = Describe("YttSourceTransformation map functions", func() {
 		Expect(requests[0].Name).To(Equal(yttSource0.Name))
 		Expect(requests[0].Namespace).To(Equal(yttSource0.Namespace))
 
-		set.Insert(&corev1.ObjectReference{APIVersion: extensionv1alpha1.GroupVersion.String(),
-			Kind: extensionv1alpha1.YttSourceKind, Namespace: yttSource1.Namespace, Name: yttSource1.Name})
+		set.Insert(&corev1.ObjectReference{APIVersion: extensionv1beta1.GroupVersion.String(),
+			Kind: extensionv1beta1.YttSourceKind, Namespace: yttSource1.Namespace, Name: yttSource1.Name})
 		reconciler.ReferenceMap[key] = &set
 
 		requests = controllers.RequeueYttSourceForReference(reconciler, context.TODO(), gitRepo)

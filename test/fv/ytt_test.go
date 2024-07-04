@@ -26,7 +26,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 
-	extensionv1alpha1 "github.com/gianlucam76/ytt-controller/api/v1alpha1"
+	extensionv1beta1 "github.com/gianlucam76/ytt-controller/api/v1beta1"
 )
 
 // ConfigMap ytt contains
@@ -114,12 +114,12 @@ func verifyYttSourceWithConfigMap(namePrefix, yttConfigMapName string, expectedR
 	Expect(ok).To(BeTrue())
 
 	Byf("Creating a YttSource referencing this ConfigMap")
-	yttSource := &extensionv1alpha1.YttSource{
+	yttSource := &extensionv1beta1.YttSource{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      namePrefix + randomString(),
 			Namespace: randomString(),
 		},
-		Spec: extensionv1alpha1.YttSourceSpec{
+		Spec: extensionv1beta1.YttSourceSpec{
 			Namespace: yttConfigMap.Namespace,
 			Name:      yttConfigMap.Name,
 			Kind:      configMapKind,
@@ -138,7 +138,7 @@ func verifyYttSourceWithConfigMap(namePrefix, yttConfigMapName string, expectedR
 
 	Byf("Verifying YttSource %s/%s Status", yttSource.Namespace, yttSource.Name)
 	Eventually(func() bool {
-		currentYttSource := &extensionv1alpha1.YttSource{}
+		currentYttSource := &extensionv1beta1.YttSource{}
 		err := k8sClient.Get(context.TODO(),
 			types.NamespacedName{Namespace: yttSource.Namespace, Name: yttSource.Name},
 			currentYttSource)
@@ -156,7 +156,7 @@ func verifyYttSourceWithConfigMap(namePrefix, yttConfigMapName string, expectedR
 
 	Byf("Verifying YttSource %s/%s Status.Resources", yttSource.Namespace, yttSource.Name)
 
-	currentYttSource := &extensionv1alpha1.YttSource{}
+	currentYttSource := &extensionv1beta1.YttSource{}
 	Expect(k8sClient.Get(context.TODO(),
 		types.NamespacedName{Namespace: yttSource.Namespace, Name: yttSource.Name},
 		currentYttSource)).To(Succeed())

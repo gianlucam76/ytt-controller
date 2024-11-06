@@ -8,13 +8,6 @@ rules:
   - ""
   resources:
   - configmaps
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - ""
-  resources:
   - secrets
   verbs:
   - get
@@ -58,45 +51,10 @@ rules:
   - source.toolkit.fluxcd.io
   resources:
   - buckets
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - source.toolkit.fluxcd.io
-  resources:
   - buckets/status
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - source.toolkit.fluxcd.io
-  resources:
   - gitrepositories
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - source.toolkit.fluxcd.io
-  resources:
   - gitrepositories/status
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - source.toolkit.fluxcd.io
-  resources:
   - ocirepositories
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - source.toolkit.fluxcd.io
-  resources:
   - ocirepositories/status
   verbs:
   - get

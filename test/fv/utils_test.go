@@ -27,7 +27,7 @@ import (
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"sigs.k8s.io/cluster-api/util"
 
-	"github.com/projectsveltos/libsveltos/lib/utils"
+	"github.com/projectsveltos/libsveltos/lib/k8s_utils"
 )
 
 const (
@@ -57,7 +57,7 @@ func collectContent(data string) []*unstructured.Unstructured {
 			continue
 		}
 
-		policy, err := utils.GetUnstructured([]byte(section))
+		policy, err := k8s_utils.GetUnstructured([]byte(section))
 		Expect(err).To(BeNil())
 		Expect(policy).ToNot(BeNil())
 

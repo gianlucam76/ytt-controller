@@ -2,7 +2,7 @@
 # Image URL to use all building/pushing image targets
 IMG ?= controller:latest
 # KUBEBUILDER_ENVTEST_KUBERNETES_VERSION refers to the version of kubebuilder assets to be downloaded by envtest binary.
-KUBEBUILDER_ENVTEST_KUBERNETES_VERSION = 1.31.0
+KUBEBUILDER_ENVTEST_KUBERNETES_VERSION = 1.35.0
 
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
 ifeq (,$(shell go env GOBIN))
@@ -66,17 +66,17 @@ GINKGO := $(TOOLS_BIN_DIR)/ginkgo
 KIND := $(TOOLS_BIN_DIR)/kind
 KUBECTL := $(TOOLS_BIN_DIR)/kubectl
 
-GOLANGCI_LINT_VERSION := "v1.62.2"
-CLUSTERCTL_VERSION := "v1.9.4"
+GOLANGCI_LINT_VERSION := "v2.7.2"
+CLUSTERCTL_VERSION := "v1.12.1"
 
-KUSTOMIZE_VER := v5.3.0
+KUSTOMIZE_VER := v5.8.0
 KUSTOMIZE_BIN := kustomize
 KUSTOMIZE := $(abspath $(TOOLS_BIN_DIR)/$(KUSTOMIZE_BIN)-$(KUSTOMIZE_VER))
 KUSTOMIZE_PKG := sigs.k8s.io/kustomize/kustomize/v5
 $(KUSTOMIZE): # Build kustomize from tools folder.
 	CGO_ENABLED=0 GOBIN=$(TOOLS_BIN_DIR) $(GO_INSTALL) $(KUSTOMIZE_PKG) $(KUSTOMIZE_BIN) $(KUSTOMIZE_VER)
 
-SETUP_ENVTEST_VER := release-0.19
+SETUP_ENVTEST_VER := release-0.22
 SETUP_ENVTEST_BIN := setup-envtest
 SETUP_ENVTEST := $(abspath $(TOOLS_BIN_DIR)/$(SETUP_ENVTEST_BIN)-$(SETUP_ENVTEST_VER))
 SETUP_ENVTEST_PKG := sigs.k8s.io/controller-runtime/tools/setup-envtest
@@ -147,7 +147,7 @@ vet: ## Run go vet against code.
 
 .PHONY: lint
 lint: $(GOLANGCI_LINT) generate ## Lint codebase
-	$(GOLANGCI_LINT) run -v --fast=false --max-issues-per-linter 0 --max-same-issues 0 --timeout 5m	
+	$(GOLANGCI_LINT) run -v --max-issues-per-linter 0 --max-same-issues 0 --timeout 5m
 
 .PHONY: check-manifests
 check-manifests: manifests ## Verify manifests file is up to date
@@ -164,7 +164,7 @@ endif
 # K8S_VERSION for the Kind cluster can be set as environment variable. If not defined,
 # this default value is used
 ifndef K8S_VERSION
-K8S_VERSION := v1.32.0
+K8S_VERSION := v1.35.0
 endif
 
 KIND_CONFIG ?= kind-cluster.yaml
@@ -179,7 +179,7 @@ fv: $(GINKGO) ## Run Sveltos Controller tests using existing cluster
 .PHONY: create-cluster
 create-cluster: $(KIND) $(KUBECTL) $(ENVSUBST) ## Create a new kind cluster designed for development
 	sed -e "s/K8S_VERSION/$(K8S_VERSION)/g"  test/$(KIND_CONFIG) > test/$(KIND_CONFIG).tmp
-	$(KIND) create cluster --name=$(CONTROL_CLUSTER_NAME) --config test/$(KIND_CONFIG).tmp	
+	$(KIND) create cluster --name=$(CONTROL_CLUSTER_NAME) --config test/$(KIND_CONFIG).tmp
 
 	@echo "Start ytt-controller"
 	$(MAKE) deploy-ytt-controller
@@ -213,7 +213,7 @@ kind-test: test create-cluster fv ## Build docker image; start kind cluster; loa
 
 .PHONY: test
 test: | check-manifests generate fmt vet $(SETUP_ENVTEST) ## Run uts.
-	KUBEBUILDER_ASSETS="$(KUBEBUILDER_ASSETS)" go test $(shell go list ./... |grep -v test/fv) $(TEST_ARGS) -coverprofile cover.out 
+	KUBEBUILDER_ASSETS="$(KUBEBUILDER_ASSETS)" go test $(shell go list ./... |grep -v test/fv) $(TEST_ARGS) -coverprofile cover.out
 
 set-manifest-image:
 	$(info Updating kustomize image patch file for manager resource)

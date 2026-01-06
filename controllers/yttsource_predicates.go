@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"reflect"
 
+	"github.com/fluxcd/pkg/apis/meta"
 	sourcev1 "github.com/fluxcd/source-controller/api/v1"
 	sourcev1b2 "github.com/fluxcd/source-controller/api/v1beta2"
 	"github.com/go-logr/logr"
@@ -284,12 +285,17 @@ func hasArtifactChanged(objNew, objOld client.Object) bool {
 	return false
 }
 
-func isArtifactSame(oldArtifact, newArtifact *sourcev1.Artifact) bool {
+func isArtifactSame(oldArtifact, newArtifact *meta.Artifact) bool {
+	if oldArtifact == nil && newArtifact == nil {
+		return true
+	}
+
 	if oldArtifact == nil && newArtifact != nil {
 		return false
 	}
 	if oldArtifact != nil && newArtifact == nil {
 		return false
 	}
-	return reflect.DeepEqual(oldArtifact, newArtifact)
+
+	return reflect.DeepEqual(oldArtifact.Digest, newArtifact.Digest)
 }

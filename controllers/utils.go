@@ -120,7 +120,7 @@ func getReferenceAPIVersion(yttSource *extensionv1beta1.YttSource) string {
 // getConfigMap retrieves any ConfigMap from the given name and namespace.
 func getConfigMap(ctx context.Context, c client.Client, configmapName types.NamespacedName) (*corev1.ConfigMap, error) {
 	configMap := &corev1.ConfigMap{}
-	configMapKey := client.ObjectKey{
+	configMapKey := types.NamespacedName{
 		Namespace: configmapName.Namespace,
 		Name:      configmapName.Name,
 	}
@@ -134,7 +134,7 @@ func getConfigMap(ctx context.Context, c client.Client, configmapName types.Name
 // getSecret retrieves any Secret from the given secret name and namespace.
 func getSecret(ctx context.Context, c client.Client, secretName types.NamespacedName) (*corev1.Secret, error) {
 	secret := &corev1.Secret{}
-	secretKey := client.ObjectKey{
+	secretKey := types.NamespacedName{
 		Namespace: secretName.Namespace,
 		Name:      secretName.Name,
 	}
